@@ -23,6 +23,16 @@ function getProjects(req, res) {
 		})
 }
 
+function getProject(projectId, res) {
+	database.getProject(projectId)
+		.then((project) => {
+			res.json(project);
+		})
+		.catch(() => {
+			res.sendStatus(500);
+
+		})
+}
 
 function getPages(projectId, res) {
 	database.getPages(projectId)
@@ -39,8 +49,9 @@ function getSvg(projectId, fileName, res) {
 }
 
 router.get("/projects", getProjects);
-router.get("/:projectId/pages", (req, res) => getPages(req.params.projectId, res));
-router.get("/:projectId/svg/:fileName", (req, res) => getSvg(req.params.projectId, req.params.fileName,res));
+router.get("/projects/:projectId", (req, res) => getProject(req.params.projectId, res));
+router.get("/projects/:projectId/pages", (req, res) => getPages(req.params.projectId, res));
+router.get("/projects/:projectId/svg/:fileName", (req, res) => getSvg(req.params.projectId, req.params.fileName,res));
 
 module.exports = router;
 

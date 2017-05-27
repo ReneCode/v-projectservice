@@ -45,6 +45,24 @@ class Database {
 		})
 	}
 
+	getProject(projectId) {
+		return new Promise((resolve, reject) => {
+			var projects = this.database.collection(COLLECTION_PROJECT);
+			if (!projects) {
+				reject("projects not found");
+			}
+			projects.findOne({ _id: projectId}, (err, data) => {
+				if (err) {
+					reject(err);
+				}
+				data = databaseTools.keysToLowerCase(data);
+				data = databaseTools.updateObjectIds(data);
+
+				resolve(data);
+			});
+		})
+	}
+
 
 	getPages(projectId) {
 		return new Promise((resolve, reject) => {

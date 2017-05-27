@@ -4,6 +4,9 @@ var assert = require('assert');
 class DatabaseTools {
 
 	keysToLowerCase(obj) {
+		if (!obj) {
+			return obj;
+		}
 		if (Array.isArray(obj)) {
 			obj.forEach(o => {
 				o = this.keysToLowerCase(o);
@@ -25,6 +28,9 @@ class DatabaseTools {
 	}
 
 	updateObjectIds(obj) {
+		if (!obj) {
+			return obj;
+		}
 		if (Array.isArray(obj)) {
 			obj.forEach(o => {
 				o = this.updateObjectIds(o);
