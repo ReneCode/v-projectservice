@@ -46,6 +46,27 @@ class DatabaseTools {
 		return obj;
 	}
 
+	convertProperties(obj) {
+		if (!obj) {
+			return null;
+		}
+		if (Array.isArray(obj)) {
+			let objs = [];
+			obj.forEach(o => {
+				objs.push(this.convertProperties(o));
+			})
+			return objs;
+		}
+
+		if (obj.properties) {
+			let props = {};
+			obj.properties.forEach(p => {
+				props[p._id] = p.Val;
+			});
+			obj.properties = props;
+		}
+		return obj;
+	}
 }
 
 module.exports = new DatabaseTools();

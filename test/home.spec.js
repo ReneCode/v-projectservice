@@ -2,8 +2,10 @@
 let superagent = require('superagent');
 let assert = require('chai').assert;
 
+const host = "http://localhost:3000";
+
 describe("home", () => {
-	const url = "http://localhost:8080";
+	const url = host;
 	it("get", (done) => {
 
 		superagent.get(url, (err, res) => {

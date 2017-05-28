@@ -39,6 +39,7 @@ class Database {
 				}
 				data = databaseTools.keysToLowerCase(data);
 				data = databaseTools.updateObjectIds(data);
+				data = databaseTools.convertProperties(data);
 
 				resolve(data);
 			});
@@ -57,6 +58,7 @@ class Database {
 				}
 				data = databaseTools.keysToLowerCase(data);
 				data = databaseTools.updateObjectIds(data);
+				data = databaseTools.convertProperties(data);
 
 				resolve(data);
 			});
@@ -76,6 +78,7 @@ class Database {
 				}
 				data = databaseTools.keysToLowerCase(data);
 				data = databaseTools.updateObjectIds(data);
+				data = databaseTools.convertProperties(data);
 
 				resolve(data);
 			});
