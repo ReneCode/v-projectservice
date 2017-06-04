@@ -1,7 +1,7 @@
 
 // let superagent = require('superagent');
 let axios = require('axios')
-let assert = require('chai').assert;
+let should = require('chai').should();
 
 let server = require('../src/server');
 let getAuthToken = require('./get-auth-token');
@@ -33,14 +33,13 @@ describe.skip("pages", () => {
 		done()
 	});
 
-	it("should get pages", (done) => {
+	it("should get pages", () => {
 		const url = `${host}/api/v1/projects/${projectId}/pages`;
 
-		axios.get(url).then( (res) => {
-			assert.isNull(err);
-			assert.isNotNull(res);
-			assert.isArray(res.body);
-			done();
-		})
+		return axios.get(url).then( (res) => {
+			res.should.be.not.null;
+			res.data.should.be.a('array');
+			res.data.length.should.be.at.least(0);
+		});
 	});
 })
