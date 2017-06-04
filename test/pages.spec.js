@@ -1,8 +1,29 @@
 
-let superagent = require('superagent');
+// let superagent = require('superagent');
+let axios = require('axios')
 let assert = require('chai').assert;
 
-const host = "http://localhost:3000";
+let server = require('../src/server');
+let getAuthToken = require('./get-auth-token');
+
+const PORT = 3000;
+const host = `http://localhost:${PORT}`;
+
+let api = undefined;
+
+before('start server', (done) => {
+	api = server.listen(PORT, () => {
+		getAuthToken().then((token) => {
+			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+			done();
+		});
+	});
+});
+
+after('close server', () => {
+	api.close();
+})
+
 
 describe.skip("pages", () => {
 
@@ -15,11 +36,10 @@ describe.skip("pages", () => {
 	it("should get pages", (done) => {
 		const url = `${host}/api/v1/projects/${projectId}/pages`;
 
-		superagent.get(url, (err, res) => {
+		axios.get(url).then( (res) => {
 			assert.isNull(err);
 			assert.isNotNull(res);
 			assert.isArray(res.body);
-
 			done();
 		})
 	});

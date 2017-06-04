@@ -1,16 +1,29 @@
 
-let superagent = require('superagent');
-let assert = require('chai').assert;
+let axios = require('axios');
+let should = require('chai').should();
+let server = require('../src/server');
 
-const host = "http://localhost:3000";
+const PORT = 3000;
+const host = `http://localhost:${PORT}`;
 
-describe.skip("home", () => {
+let api = undefined;
+
+before('start server', (done) => {
+	api = server.listen(PORT, () => {
+		done();
+	});
+});
+
+after('close server', () => {
+	api.close();
+})
+
+describe("home", () => {
 	const url = host;
 	it("get", (done) => {
 
-		superagent.get(url, (err, res) => {
-			assert.isNull(err);
-			assert.isNotNull(res);
+		axios.get(url).then( (res) => {
+			res.should.be.not.null;
 			done();
 		})
 	});

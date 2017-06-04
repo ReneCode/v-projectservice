@@ -2,8 +2,22 @@
 let superagent = require('superagent');
 let assert = require('chai').assert;
 let expect = require('chai').expect;
+let server = require('../src/server');
 
-const host = "http://localhost:3000";
+const PORT = 3000;
+const host = `http://localhost:${PORT}`;
+
+let api = undefined;
+
+before('start server', (done) => {
+	api = server.listen(PORT, () => {
+		done();
+	});
+});
+
+after('close server', () => {
+	api.close();
+})
 
 describe.skip("projects", () => {
 
