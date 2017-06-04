@@ -17,4 +17,19 @@ describe("pages", () => {
 			res.data.length.should.be.at.least(1);
 		});
 	});
+
+	it("should count pages", () => {
+		const url = `${host}/api/v1/projects/${projectId}/pages`;
+		const options = {
+			params: {
+				meta: 'count'
+			}
+		}
+		return axios.get(url, options).then((res) => {
+			res.should.be.not.null;
+			res.data.should.be.not.null;;
+			res.data.should.be.equal(3);
+		});
+	});
+	
 })
