@@ -3,43 +3,18 @@
 let axios = require('axios')
 let should = require('chai').should();
 
-let server = require('../src/server');
-let getAuthToken = require('./get-auth-token');
+const host = 'http://localhost:3000';
 
-const PORT = 3000;
-const host = `http://localhost:${PORT}`;
-
-let api = undefined;
-
-before('start server', (done) => {
-	api = server.listen(PORT, () => {
-		getAuthToken().then((token) => {
-			axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-			done();
-		});
-	});
-});
-
-after('close server', () => {
-	api.close();
-})
-
-
-describe.skip("pages", () => {
-
-	const projectId = "1c543880-0a6a-4ef1-b1a1-8d4eb41465b0";
-
-	before("open database", (done) => {
-		done()
-	});
+describe("pages", () => {
+	const projectId = "a76c8bc2-c591-4aee-b1ab-524b472bea92";
 
 	it("should get pages", () => {
 		const url = `${host}/api/v1/projects/${projectId}/pages`;
-
-		return axios.get(url).then( (res) => {
+		return axios.get(url).then((res) => {
 			res.should.be.not.null;
+			res.data.should.be.not.null;;
 			res.data.should.be.a('array');
-			res.data.length.should.be.at.least(0);
+			res.data.length.should.be.at.least(1);
 		});
 	});
 })

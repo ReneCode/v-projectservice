@@ -1,9 +1,14 @@
-var server = require('./server');
+const WebServer = require('./web-server');
+const database = require('./database/database');
 
+const webServer = new WebServer();
+const server = webServer.createServer();
+const port = webServer.getPort();
 
-var port = process.env.PORT || 3000;
+database.connect().then(() => {
 
-server.listen(port, () => {
-	console.log("server listen on port:", port);
-})
+	server.listen(port, () => {
+		console.log("server listen on port:", port);
+	})
+});
 

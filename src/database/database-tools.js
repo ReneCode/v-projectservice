@@ -2,7 +2,6 @@
 var assert = require('assert');
 
 class DatabaseTools {
-
 	keysToLowerCase(obj) {
 		if (!obj) {
 			return obj;

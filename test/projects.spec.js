@@ -1,53 +1,30 @@
 
-let superagent = require('superagent');
-let assert = require('chai').assert;
-let expect = require('chai').expect;
-let server = require('../src/server');
+let axios = require('axios');
+let should = require('chai').should();
 
 const PORT = 3000;
 const host = `http://localhost:${PORT}`;
 
-let api = undefined;
 
-before('start server', (done) => {
-	api = server.listen(PORT, () => {
-		done();
-	});
-});
+describe("projects", () => {
 
-after('close server', () => {
-	api.close();
-})
-
-describe.skip("projects", () => {
-
-	before("open database", (done) => {
-		done()
-	});
-
-	it("get projects", (done) => {
+	it("get projects", () => {
 		const url = `${host}/api/v1/projects/`;
 
-		superagent.get(url, (err, res) => {
-			assert.isNull(err);
-			assert.isNotNull(res);
-			assert.isArray(res.body);
-
-			done();
-		})
+		return axios.get(url).then( (res) => {
+			res.should.be.not.null;
+			res.data.should.be.a('array');
+		});
 	});
 
-	it("get one project", (done) => {
+	it("get one project", () => {
 		const projectId = "a76c8bc2-c591-4aee-b1ab-524b472bea92";
 		const url = `${host}/api/v1/projects/${projectId}`;
 
-		superagent.get(url, (err, res) => {
-			expect(err).to.be.null;
-			expect(res).to.not.be.null;
-			expect(res.body).to.not.be.null;
-			expect(res.body).to.be.an('object');
-
-			done();
+		return axios.get(url).then ( (res) => {
+			res.should.be.not.null;
+			res.data.should.be.not.null;
+			res.data.should.be.a('object');
 		})
 	});
 

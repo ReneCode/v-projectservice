@@ -4,14 +4,6 @@ var router = express.Router();
 
 var database = require('../database/database');
 
-
-const DATABASE_NAME = "dev_dbprojects-0a7b63de-9e54-4d7d-a3b0-d15a2aef8679";
-
-database.connect()
-	.then(() => {
-		database.openDatabase(DATABASE_NAME)
-	});
-
 function getProjects(req, res) {
 	database.getProjects()
 		.then((projects) => {
@@ -39,7 +31,8 @@ function getPages(projectId, res) {
 		.then((pages) => {
 			res.json(pages);
 		})
-		.catch(() => {
+		.catch((err) => {
+			console.log(err);
 			res.sendStatus(500);
 		})
 }

@@ -2,7 +2,9 @@
 var MongoClient = require('mongodb').MongoClient;
 var databaseTools = require('./database-tools');
 
-var URL = process.env.DV_MONGO_URI;
+const URL = process.env.DV_MONGO_URI;
+const DATABASE_NAME = "dev_dbprojects-0a7b63de-9e54-4d7d-a3b0-d15a2aef8679";
+
 var COLLECTION_PROJECT = "projects";
 var COLLECTION_PAGE = "pages";
 
@@ -13,18 +15,14 @@ class Database {
 
 	connect() {
 		return new Promise((resolve, reject) => {
-			MongoClient.connect(URL, (err, db) => {
+			MongoClient.connect(URL, (err, connection) => {
 				if (err) {
 					reject(err);
 				}
-				this.database = db;
-				resolve(db);
+				this.database = connection.db(DATABASE_NAME);
+				resolve(this.database);
 			})
 		})
-	}
-
-	openDatabase(databaseName) {
-		this.database = this.database.db(databaseName);
 	}
 
 	getProjects() {
