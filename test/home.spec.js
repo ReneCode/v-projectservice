@@ -4,7 +4,7 @@ let assert = require('chai').assert;
 
 const host = "http://localhost:3000";
 
-describe("home", () => {
+describe.skip("home", () => {
 	const url = host;
 	it("get", (done) => {
 

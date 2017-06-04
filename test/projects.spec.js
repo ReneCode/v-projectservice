@@ -5,7 +5,7 @@ let expect = require('chai').expect;
 
 const host = "http://localhost:3000";
 
-describe("projects", () => {
+describe.skip("projects", () => {
 
 	before("open database", (done) => {
 		done()
