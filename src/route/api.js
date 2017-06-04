@@ -22,12 +22,11 @@ function getProject(projectId, res) {
 		})
 		.catch(() => {
 			res.sendStatus(500);
-
 		})
 }
 
-function getPages(projectId, res) {
-	database.getPages(projectId)
+function getPages(projectId, query, res) {
+	database.getPages(projectId, query)
 		.then((pages) => {
 			res.json(pages);
 		})
@@ -43,7 +42,7 @@ function getSvg(projectId, fileName, res) {
 
 router.get("/projects", getProjects);
 router.get("/projects/:projectId", (req, res) => getProject(req.params.projectId, res));
-router.get("/projects/:projectId/pages", (req, res) => getPages(req.params.projectId, res));
+router.get("/projects/:projectId/pages", (req, res) => getPages(req.params.projectId, req.query, res));
 router.get("/projects/:projectId/svg/:fileName", (req, res) => getSvg(req.params.projectId, req.params.fileName,res));
 
 module.exports = router;
