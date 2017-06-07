@@ -2,7 +2,6 @@
 var MongoClient = require('mongodb').MongoClient;
 var databaseTools = require('./database-tools');
 
-const URL = process.env.DV_MONGO_URI;
 const DATABASE_NAME = "dev_dbprojects-0a7b63de-9e54-4d7d-a3b0-d15a2aef8679";
 
 var COLLECTION_PROJECT = "projects";
@@ -13,9 +12,9 @@ class Database {
 		this.database = undefined;
 	}
 
-	connect() {
+	connect(connectionString) {
 		return new Promise((resolve, reject) => {
-			MongoClient.connect(URL, (err, connection) => {
+			MongoClient.connect(connectionString, (err, connection) => {
 				if (err) {
 					reject(err);
 				}

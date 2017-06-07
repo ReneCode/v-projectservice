@@ -1,12 +1,32 @@
 
 var azure = require("azure-storage");
 
-const connectionString = process.env.DV_BLOB_STORAGE_CONNECTION_STRING;
 
-let blobService = azure.createBlobService(connectionString);
 
 
 class BlobStorage {
+    connect(connectionString) {
+        return new Promise((resolve, reject) => {
+            try {
+                this.blobService = azure.createBlobService(connectionString);
+                resolve(true);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
+
+    getBlob(containerName, key) {
+        return new Promise((resolve, reject) => {
+            this.blobService.getBlobToText(containerName, key, (err, content, blob) => {
+                if (err) {
+                    reject(err);
+                }
+                resolve(content);
+            })
+
+        })
+    }
 
     getBlobs(containerName, prefix, continuationToken, maxResults) {
         return new Promise((resolve, reject) => {
@@ -26,6 +46,10 @@ class BlobStorage {
         });
     }
 
+
+    // existsContainer(containerName) {
+    //     this.blobService.getBlobProperties()
+    // }
 
 };
 

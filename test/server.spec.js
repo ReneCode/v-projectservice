@@ -1,5 +1,6 @@
 var WebServer = require('../src/web-server');
 let database = require('../src/database/database');
+let blobStorage = require('../src/blobstorage/blobstorage');
 
 // create Server
 const options = { mode: "testing" };
@@ -17,13 +18,18 @@ let api = undefined;
 */
 
 before('start server', (done) => {
-  // console.log("start testing backend server")
-  api = server.listen(PORT, () => {
-    database.connect().then(() => {
-      done();
 
+  const mongoConnectionString = process.env.DV_MONGO_URI;
+  const storageConnectionString = process.env.DV_BLOB_STORAGE_CONNECTION_STRING;
+  database.connect(mongoConnectionString)
+    .then(() => {
+      return blobStorage.connect(storageConnectionString);
     })
-  });
+    .then(() => {
+      api = server.listen(PORT, () => {
+        done();
+      });
+    });
 });
 
 after('close server', (done) => {
@@ -31,4 +37,4 @@ after('close server', (done) => {
   api.close(() => {
     done();
   });
-})
+});
