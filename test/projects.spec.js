@@ -18,7 +18,7 @@ describe("projects", () => {
 	});
 
 	it("get one project", () => {
-		const projectId = "a76c8bc2-c591-4aee-b1ab-524b472bea92";
+		const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
 		const url = `${host}/api/v1/projects/${projectId}`;
 
 		return axios.get(url).then ( (res) => {

@@ -6,7 +6,7 @@ let should = require('chai').should();
 const host = 'http://localhost:3000';
 
 describe("pages", () => {
-	const projectId = "a76c8bc2-c591-4aee-b1ab-524b472bea92";
+	const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
 
 	it("should get pages", () => {
 		const url = `${host}/api/v1/projects/${projectId}/pages`;
