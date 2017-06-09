@@ -2,6 +2,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var databaseTools = require('./database-tools');
 
+// dev stage
 const DATABASE_NAME = "dev_dbprojects-0a7b63de-9e54-4d7d-a3b0-d15a2aef8679";
 
 var COLLECTION_PROJECT = "projects";
@@ -86,6 +87,26 @@ class Database {
 					resolve(data);
 				});
 			}
+		})
+	}
+
+	getPage(projectId, pageId) {
+		return new Promise((resolve, reject) => {
+			var pages = this.database.collection(COLLECTION_PAGE);
+			if (!pages) {
+				reject("pages not found");
+			}
+			let filter = { ProjectId: projectId, _id: pageId };
+			pages.findOne(filter, (err, data) => {
+				if (err) {
+					reject(err);
+				}
+				data = databaseTools.keysToLowerCase(data);
+				data = databaseTools.updateObjectIds(data);
+				data = databaseTools.convertProperties(data);
+
+				resolve(data);
+			});
 		})
 	}
 }

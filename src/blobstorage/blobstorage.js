@@ -16,6 +16,18 @@ class BlobStorage {
         });
     }
 
+    getKey(projectId, filename) {
+        return `${projectId}-${filename}`;
+    }
+
+    getContainerName(tenantId) {
+        let name = 'devcontainer';
+        if (tenantId) {
+            name = name + `-${tenantId}`;
+        }
+        return name;
+    }
+
     getBlob(containerName, key) {
         return new Promise((resolve, reject) => {
             this.blobService.getBlobToText(containerName, key, (err, content, blob) => {
