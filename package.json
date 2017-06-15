@@ -1,6 +1,6 @@
 {
   "name": "v-projectservice",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "azure-storage": "^2.1.0",
+    "body-parser": "^1.17.2",
     "cors": "^2.8.3",
     "express": "^4.15.3",
     "express-jwt": "^5.3.0",
@@ -23,7 +23,6 @@
     "axios": "^0.16.2",
     "chai": "^3.5.0",
     "mocha": "^3.4.2",
-    "nodemon": "^1.11.0",
-    "superagent": "^3.5.2"
+    "nodemon": "^1.11.0"
   }
 }

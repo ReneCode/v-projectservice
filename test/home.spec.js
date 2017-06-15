@@ -2,7 +2,7 @@
 let axios = require('axios');
 let should = require('chai').should();
 
-const host = `http://localhost:3000`;
+const host = `http://localhost:3001`;
 
 describe("home", () => {
 	const url = host;

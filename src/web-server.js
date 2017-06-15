@@ -4,6 +4,7 @@ var express = require('express');
 var http = require('http');
 var logger = require('morgan');
 var cors = require('cors');
+var bodyParser = require('body-parser');
 
 var jwt = require('express-jwt');
 
@@ -12,20 +13,24 @@ var routeApi = require('./route/api');
 
 class WebServer {
 
-	constructor(config = {}) {
-		this.testing = false;
-		this.port = process.env.PORT || 3000;
-
-		if (config.mode === "testing") {
-			this.testing = true;
+	constructor(options) {
+		if (!options) {
+			throw new Error("options missing")
 		}
-		if (config.port) {
-			this.port = config.port;
-		}
+		this.options = options;
+		if (this.options.authorize === undefined) this.options.authorize = true;
+		if (this.options.logging === undefined) this.options.logging = true;
 	}
 
-	getPort() {
-		return this.port;
+	listen() {
+		return new Promise((resolve, reject) => {
+			if (!this.options.port) {
+				reject("port not set");
+			}
+			var api = this.server.listen(this.options.port, () => {
+				resolve(api);
+			});
+		});
 	}
 
 	createServer() {
@@ -40,26 +45,28 @@ class WebServer {
 			audience: AUTH0_AUDIENCE
 		})
 
+		app.use(bodyParser.json());
+		app.use(bodyParser.urlencoded({ extended: true }));
 		app.use(cors());
 
-		if (!this.testing) {
+		if (this.options.logging) {
 			app.use(logger('dev'));
 		}
 
 		app.use("/", routeHome);
 
-		if (!this.testing) {
+		if (this.options.authorize) {
 			app.use(authCheck);
 		}
 		app.use("/api/v1/", routeApi);
 
-		let server = http.createServer(app);
+		this.server = http.createServer(app);
 
-		server.on('close', () => {
-			// console.log("server closed");
+		this.server.on('close', () => {
+			if (this.options.logging) {
+				console.log("server closed");
+			}
 		})
-
-		return server;
 	}
 }
 

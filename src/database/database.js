@@ -7,6 +7,7 @@ const DATABASE_NAME = "dev_dbprojects-0a7b63de-9e54-4d7d-a3b0-d15a2aef8679";
 
 var COLLECTION_PROJECT = "projects";
 var COLLECTION_PAGE = "pages";
+// var COLLECTION_DATA = "data";
 
 class Database {
 	constructor() {
@@ -40,6 +41,32 @@ class Database {
 				data = databaseTools.convertProperties(data);
 
 				resolve(data);
+			});
+		})
+	}
+
+	postProject(project) {
+		return new Promise((resolve, reject) => {
+			if (!project) {
+				reject("no project");
+			}
+			const isArray = Array.isArray(project);
+			var colData = this.database.collection(COLLECTION_DATA);
+			if (!colData) {
+				reject("no data collection");
+			}
+			colData.insert(project, (err, data) => {
+				if (err) {
+					reject(err);
+				}
+				if (!data.ops) {
+					reject("bad result");
+				}
+				if (isArray) {
+					resolve(data.ops);
+				} else {
+					resolve(data.ops[0]);
+				}
 			});
 		})
 	}

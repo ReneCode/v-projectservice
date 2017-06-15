@@ -3,7 +3,7 @@
 let axios = require('axios')
 let should = require('chai').should();
 
-const host = 'http://localhost:3000';
+const host = 'http://localhost:3001';
 
 describe("pages", () => {
 	const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
