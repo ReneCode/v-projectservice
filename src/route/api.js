@@ -63,7 +63,16 @@ function getPage(projectId, pageId, query, res) {
 }
 
 function getRedlinings(req, res) {
-	res.json([1]);
+	const projectId = req.params.projectId;
+	database.getRedlinings(projectId, req.query)
+		.then((redlinings) => {
+			res.json(redlinings);
+
+		})
+		.catch((err) => {
+			console.error(err);
+			res.sendStatus(500)
+		})
 }
 
 

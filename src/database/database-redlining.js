@@ -1,7 +1,7 @@
 
 var databaseTools = require('./database-tools');
 
-var COLLECTION_REDLINING = "redlinings";
+var COLLECTION_REDLINING = "redlining";
 
 class DatabaseRedlining {
 
@@ -12,42 +12,35 @@ class DatabaseRedlining {
   getCollection() {
     return this.database.collection(COLLECTION_REDLINING);
   }
-/*
-  getPages(projectId, query) {
-    return new Promise((resolve, reject) => {
-      var pages = this.getCollection();
-      if (!pages) {
-        reject("pages not found");
+  
+  getQueryValue(query, name) {
+    name = name.toLowerCase()
+    if (query) {
+      for (var prop of Object.keys(query)) {
+        if (prop.toLowerCase() === name) {
+          return query[prop];
+        }
       }
-
-      let filter = { ProjectId: projectId };
-      if (query.meta == 'count') {
-        pages.count(filter, (err, data) => {
-          resolve(data);
-        });
-      } else {
-        pages.find(filter).toArray((err, data) => {
-          if (err) {
-            reject(err);
-          }
-          data = databaseTools.keysToLowerCase(data);
-          data = databaseTools.updateObjectIds(data);
-          data = databaseTools.convertProperties(data);
-
-          resolve(data);
-        });
-      }
-    })
+    }
+    return undefined;
   }
 
-  getPage(projectId, pageId) {
+  getRedlinings(projectId, query) {
     return new Promise((resolve, reject) => {
-      var pages = this.getCollection();
-      if (!pages) {
-        reject("pages not found");
+      var redlinings = this.getCollection();
+      if (!redlinings) {
+        reject("redlinings not found");
       }
-      let filter = { ProjectId: projectId, _id: pageId };
-      pages.findOne(filter, (err, data) => {
+
+      let pageTblObjectId = this.getQueryValue(query, 'pageTblObjectId');
+      let filter = {
+        ProjectId: projectId
+      };
+      if (pageTblObjectId !== undefined) {
+        filter.PageTblObjectId = parseInt(pageTblObjectId);
+      }
+
+      redlinings.find(filter).toArray((err, data) => {
         if (err) {
           reject(err);
         }
@@ -59,7 +52,6 @@ class DatabaseRedlining {
       });
     })
   }
-*/
 }
 
-module.exports = DatabasePage;
+module.exports = DatabaseRedlining;
