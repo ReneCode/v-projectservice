@@ -1,18 +1,18 @@
 
 var databaseTools = require('./database-tools');
 
-var COLLECTION_PAGE = "pages";
+var COLLECTION_REDLINING = "redlinings";
 
-class DatabasePage {
+class DatabaseRedlining {
 
   constructor(database) {
     this.database = database;
   }
 
   getCollection() {
-    return this.database.collection(COLLECTION_PAGE);
+    return this.database.collection(COLLECTION_REDLINING);
   }
-
+/*
   getPages(projectId, query) {
     return new Promise((resolve, reject) => {
       var pages = this.getCollection();
@@ -59,7 +59,7 @@ class DatabasePage {
       });
     })
   }
-
+*/
 }
 
 module.exports = DatabasePage;
