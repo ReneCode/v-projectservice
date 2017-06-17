@@ -19,7 +19,7 @@ database.connect(mongoConnectionString)
     console.log("server listen on port:", OPTIONS.port);
   })
   .catch((err) => {
-    console.log("can not start to v-project service:", err);
+    console.log("can not start v-project service:", err);
   });
 
 
