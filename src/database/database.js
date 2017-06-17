@@ -1,12 +1,12 @@
 
 var MongoClient = require('mongodb').MongoClient;
 var databaseTools = require('./database-tools');
+let DatabasePage = require('./database-page');
+let DatabaseProject = require('./database-project');
 
 // dev stage
 const DATABASE_NAME = "dev_dbprojects-0a7b63de-9e54-4d7d-a3b0-d15a2aef8679";
 
-var COLLECTION_PROJECT = "projects";
-var COLLECTION_PAGE = "pages";
 // var COLLECTION_DATA = "data";
 
 class Database {
@@ -21,120 +21,33 @@ class Database {
 					reject(err);
 				}
 				this.database = connection.db(DATABASE_NAME);
+
+				this.dbPage = new DatabasePage(this.database);
+				this.dbProject = new DatabaseProject(this.database);
+
 				resolve(this.database);
 			})
 		})
 	}
 
 	getProjects() {
-		return new Promise((resolve, reject) => {
-			var projects = this.database.collection(COLLECTION_PROJECT);
-			if (!projects) {
-				reject("projects not found");
-			}
-			projects.find({}).toArray((err, data) => {
-				if (err) {
-					reject(err);
-				}
-				data = databaseTools.keysToLowerCase(data);
-				data = databaseTools.updateObjectIds(data);
-				data = databaseTools.convertProperties(data);
-
-				resolve(data);
-			});
-		})
+		return this.dbProject.getProjects();
 	}
 
 	postProject(project) {
-		return new Promise((resolve, reject) => {
-			if (!project) {
-				reject("no project");
-			}
-			const isArray = Array.isArray(project);
-			var colData = this.database.collection(COLLECTION_DATA);
-			if (!colData) {
-				reject("no data collection");
-			}
-			colData.insert(project, (err, data) => {
-				if (err) {
-					reject(err);
-				}
-				if (!data.ops) {
-					reject("bad result");
-				}
-				if (isArray) {
-					resolve(data.ops);
-				} else {
-					resolve(data.ops[0]);
-				}
-			});
-		})
+		return this.dbProject.postProject(project);
 	}
 
 	getProject(projectId) {
-		return new Promise((resolve, reject) => {
-			var projects = this.database.collection(COLLECTION_PROJECT);
-			if (!projects) {
-				reject("projects not found");
-			}
-			projects.findOne({ _id: projectId }, (err, data) => {
-				if (err) {
-					reject(err);
-				}
-				data = databaseTools.keysToLowerCase(data);
-				data = databaseTools.updateObjectIds(data);
-				data = databaseTools.convertProperties(data);
-
-				resolve(data);
-			});
-		})
+		return this.dbProject.getProject(projectId);
 	}
 
-
 	getPages(projectId, query) {
-		return new Promise((resolve, reject) => {
-			var pages = this.database.collection(COLLECTION_PAGE);
-			if (!pages) {
-				reject("pages not found");
-			}
-			let filter = { ProjectId: projectId };
-			if (query.meta == 'count') {
-				pages.count(filter, (err, data) => {
-					resolve(data);
-				});
-			} else {
-				pages.find(filter).toArray((err, data) => {
-					if (err) {
-						reject(err);
-					}
-					data = databaseTools.keysToLowerCase(data);
-					data = databaseTools.updateObjectIds(data);
-					data = databaseTools.convertProperties(data);
-
-					resolve(data);
-				});
-			}
-		})
+		return this.dbPage.getPages(projectId, query);
 	}
 
 	getPage(projectId, pageId) {
-		return new Promise((resolve, reject) => {
-			var pages = this.database.collection(COLLECTION_PAGE);
-			if (!pages) {
-				reject("pages not found");
-			}
-			let filter = { ProjectId: projectId, _id: pageId };
-			pages.findOne(filter, (err, data) => {
-				if (err) {
-					reject(err);
-				}
-				data = databaseTools.keysToLowerCase(data);
-				data = databaseTools.updateObjectIds(data);
-				data = databaseTools.convertProperties(data);
-
-				resolve(data);
-			});
-		})
+		return this.dbPage.getPage(projectId, pageId);
 	}
 }
 
