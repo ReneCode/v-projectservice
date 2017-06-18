@@ -32,8 +32,8 @@ class Database {
 		})
 	}
 
-	getProjects() {
-		return this.dbProject.getProjects();
+	getProjects(query) {
+		return this.dbProject.getProjects(query);
 	}
 
 	postProject(project) {

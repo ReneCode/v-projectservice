@@ -27,16 +27,16 @@ const prjB = {
 	completed: true
 }
 
+
 describe("projects", () => {
+	const PROJECT_URL = `${host}/api/v1/projects/`;
 
 	before("set axios header", () => {
 		axios.defaults.headers["Content-Type"] = "application/json";
 	});
 
-	const PROJECT_URL = `${host}/api/v1/projects/`;
 
 	it("get projects", () => {
-
 		return axios.get(PROJECT_URL).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.a('array');
@@ -76,4 +76,17 @@ describe("projects", () => {
 		})
 	});
 
+	it("get projects by query string", () => {
+		const options = {
+			params: {
+				q: "ample_Proj"
+			}
+		}
+		return axios.get(PROJECT_URL, options).then((res) => {
+			res.should.be.not.null;
+			res.data.should.be.not.null;
+			res.data.should.be.a('array');
+			res.data.length.should.be.equal(1);
+		})
+	});
 })

@@ -5,11 +5,7 @@ var router = express.Router();
 var database = require('../database/database');
 
 function getProjects(req, res) {
-	const filter = req.params.filter;
-	if (filter) {
-
-	}
-	database.getProjects()
+	database.getProjects(req.query)
 		.then((projects) => {
 			res.json(projects);
 		})
@@ -76,8 +72,8 @@ function getRedlinings(req, res) {
 }
 
 
-router.get("/projects", (req, res) => getProjects(req, res));
-router.post("/projects", (req, res) => postProject(req, res));
+router.get("/projects", getProjects);
+router.post("/projects", postProject);
 router.get("/projects/:projectId", (req, res) => getProject(req.params.projectId, res));
 router.get("/projects/:projectId/pages", (req, res) => getPages(req.params.projectId, req.query, res));
 router.get("/projects/:projectId/pages/:pageId", (req, res) => getPage(req.params.projectId, req.params.pageId, req.query, res));

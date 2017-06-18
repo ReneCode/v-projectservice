@@ -13,13 +13,33 @@ class DatabaseProject {
     return this.database.collection(COLLECTION_PROJECT);
   }
 
-  getProjects() {
+  getFilter(query) {
+    if (!query || !query.q) {
+      return {};
+    }
+    function oneFilter(name, val) {
+      let f = {}
+      f[name] = new RegExp(val, 'i');
+      return f;
+    }
+
+    const q = query.q;
+    let filterList = [];
+    filterList.push(oneFilter("Name", q))
+    filterList.push(oneFilter("Description", q))
+    filterList.push(oneFilter("Version", q))
+    let filter = { $or: filterList };
+    return filter;
+  }
+
+  getProjects(query) {
     return new Promise((resolve, reject) => {
       var projects = this.getCollection();
       if (!projects) {
         reject("projects not found");
       }
-      projects.find({}).toArray((err, data) => {
+      const filter = this.getFilter(query);
+      projects.find(filter).toArray((err, data) => {
         if (err) {
           reject(err);
         }
