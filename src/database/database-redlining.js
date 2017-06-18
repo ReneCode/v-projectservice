@@ -33,6 +33,7 @@ class DatabaseRedlining {
       }
 
       let pageTblObjectId = this.getQueryValue(query, 'pageTblObjectId');
+      let translateY = this.getQueryValue(query, 'translateY');
       let filter = {
         ProjectId: projectId
       };
@@ -47,7 +48,10 @@ class DatabaseRedlining {
         data = databaseTools.keysToLowerCase(data);
         data = databaseTools.updateObjectIds(data);
         data = databaseTools.convertProperties(data);
-        data = databaseTools.convertRedlinings(data);
+        
+        data = databaseTools.convertRedlinings(data, {
+          translateY: translateY
+        });
 
         resolve(data);
       });

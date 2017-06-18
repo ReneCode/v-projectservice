@@ -84,7 +84,7 @@ class DatabaseTools {
 	// 	"value": ""
 	// }
 
-	convertRedlinings(obj) {
+	convertRedlinings(obj, options) {
 		if (!obj) {
 			return null;
 		}
@@ -92,7 +92,7 @@ class DatabaseTools {
 		if (Array.isArray(obj)) {
 			let objs = [];
 			obj.forEach(o => {
-				objs.push(this.convertRedlinings(o));
+				objs.push(this.convertRedlinings(o, options));
 			})
 			return objs;
 		}
@@ -108,10 +108,15 @@ class DatabaseTools {
 		if (graphic) {
 			obj.x = graphic.x;
 			obj.y = graphic.y;
+			// switch orientation of y-coordinate
+			if (options.translateY) {
+				obj.y = options.translateY - obj.y
+			}
 			obj.text = graphic.value || graphic.defaultRedliningText || "-empty-";
-			obj.fontSize = 6;
+			obj.fontSize = graphic.size || 6;
+			obj.fill = graphic.color;
 		}
-		// delete obj.graphic;
+		delete obj.graphic;
 
 		return obj;
 	}
