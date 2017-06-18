@@ -120,6 +120,26 @@ class DatabaseTools {
 
 		return obj;
 	}
+
+	getFilter(fields, q) {
+		if (!q) {
+			return {};
+		}
+		function oneFilter(name, val) {
+			let f = {};
+			f[name] = new RegExp(val, 'i');
+			return f;
+		}
+
+		let filterList = [];
+		fields.forEach(field => {
+			filterList.push(oneFilter(field, q))
+		})
+		let filter = { $or: filterList };
+		return filter;
+	}
+
+
 }
 
 module.exports = new DatabaseTools();

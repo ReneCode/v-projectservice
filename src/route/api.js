@@ -36,8 +36,10 @@ function getProject(projectId, res) {
 		})
 }
 
-function getPages(projectId, query, res) {
-	database.getPages(projectId, query)
+function getPages(req, res) {
+	const projectId = req.params.projectId;
+
+	database.getPages(projectId, req.query)
 		.then((pages) => {
 			res.json(pages);
 		})
@@ -75,7 +77,7 @@ function getRedlinings(req, res) {
 router.get("/projects", getProjects);
 router.post("/projects", postProject);
 router.get("/projects/:projectId", (req, res) => getProject(req.params.projectId, res));
-router.get("/projects/:projectId/pages", (req, res) => getPages(req.params.projectId, req.query, res));
+router.get("/projects/:projectId/pages", getPages);
 router.get("/projects/:projectId/pages/:pageId", (req, res) => getPage(req.params.projectId, req.params.pageId, req.query, res));
 
 router.get("/projects/:projectId/redlinings", getRedlinings);

@@ -20,7 +20,13 @@ class DatabasePage {
         reject("pages not found");
       }
 
-      let filter = { ProjectId: projectId };
+      let filter = {};
+      if (query) {
+        filter = databaseTools.getFilter(['Properties.Val'], query.q);
+      }
+
+      filter["ProjectId"] = projectId;
+
       if (query.meta == 'count') {
         pages.count(filter, (err, data) => {
           resolve(data);
