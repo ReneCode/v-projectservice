@@ -47,6 +47,7 @@ class DatabaseRedlining {
         data = databaseTools.keysToLowerCase(data);
         data = databaseTools.updateObjectIds(data);
         data = databaseTools.convertProperties(data);
+        data = databaseTools.convertRedlinings(data);
 
         resolve(data);
       });

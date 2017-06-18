@@ -66,6 +66,55 @@ class DatabaseTools {
 		}
 		return obj;
 	}
+
+
+
+
+	// let tmp = {
+	// 	"id": "512c8376-db1f-4d86-85f2-683d2bb1333c",
+	// 	"type": "CadText",
+	// 	"category": "default",
+	// 	"htmlClass": "CadText",
+	// 	"selectedItem": true,
+	// 	"defaultRedliningText": "Redlining",
+	// 	"x": 57.48313522338867,
+	// 	"y": 255.6322021484375, "size": 6,
+	// 	"angle": 0,
+	// 	"color": "red",
+	// 	"value": ""
+	// }
+
+	convertRedlinings(obj) {
+		if (!obj) {
+			return null;
+		}
+
+		if (Array.isArray(obj)) {
+			let objs = [];
+			obj.forEach(o => {
+				objs.push(this.convertRedlinings(o));
+			})
+			return objs;
+		}
+
+		// convert the type
+		switch (obj.type) {
+			case "CadText":
+				obj.type = "text";
+		}
+
+		// convert the graphic
+		const graphic = JSON.parse(obj.graphic);
+		if (graphic) {
+			obj.x = graphic.x;
+			obj.y = graphic.y;
+			obj.text = graphic.value || graphic.defaultRedliningText || "-empty-";
+			obj.fontSize = 6;
+		}
+		// delete obj.graphic;
+
+		return obj;
+	}
 }
 
 module.exports = new DatabaseTools();
