@@ -40,6 +40,10 @@ class WebServer {
 		const AUTH0_SECRET = process.env.AUTH0_SECRET;
 		const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE;
 
+		if (!AUTH0_SECRET || !AUTH0_AUDIENCE) {
+			throw Error("Auth configuration missing.")
+		}
+
 		var authCheck = jwt({
 			secret: new Buffer(AUTH0_SECRET),
 			audience: AUTH0_AUDIENCE

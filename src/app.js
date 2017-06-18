@@ -10,6 +10,9 @@ const webServer = new WebServer(OPTIONS);
 webServer.createServer();
 
 const mongoConnectionString = process.env.DV_MONGO_URI;
+if (!mongoConnectionString) {
+  throw Error("connection string missing");
+}
 
 database.connect(mongoConnectionString)
   .then(() => {
