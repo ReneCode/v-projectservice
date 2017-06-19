@@ -10,7 +10,7 @@ class DatabaseRedlining {
   }
 
   getCollection() {
-    return this.database.collection(COLLECTION_REDLINING);
+    return this.database.getMongoDatabase().collection(COLLECTION_REDLINING);
   }
   
   getQueryValue(query, name) {

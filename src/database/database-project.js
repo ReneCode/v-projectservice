@@ -10,7 +10,7 @@ class DatabaseProject {
   }
 
   getCollection() {
-    return this.database.collection(COLLECTION_PROJECT);
+    return this.database.getMongoDatabase().collection(COLLECTION_PROJECT);
   }
 
   getProjects(query) {

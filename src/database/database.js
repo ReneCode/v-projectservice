@@ -4,6 +4,7 @@ var databaseTools = require('./database-tools');
 let DatabasePage = require('./database-page');
 let DatabaseProject = require('./database-project');
 let DatabaseRedlining = require('./database-redlining');
+let DatabaseFunction = require('./database-function');
 
 // dev stage
 const DATABASE_NAME = "dev_dbprojects-0a7b63de-9e54-4d7d-a3b0-d15a2aef8679";
@@ -21,15 +22,20 @@ class Database {
 				if (err) {
 					reject(err);
 				}
-				this.database = connection.db(DATABASE_NAME);
+				this.mongoDatabase = connection.db(DATABASE_NAME);
 
-				this.dbPage = new DatabasePage(this.database);
-				this.dbProject = new DatabaseProject(this.database);
-				this.dbRedlining = new DatabaseRedlining(this.database);
+				this.dbPage = new DatabasePage(this);
+				this.dbProject = new DatabaseProject(this);
+				this.dbRedlining = new DatabaseRedlining(this);
+				this.dbFunction = new DatabaseFunction(this);
 
-				resolve(this.database);
+				resolve(this.mongoDatabase);
 			})
 		})
+	}
+
+	getMongoDatabase() {
+		return this.mongoDatabase;
 	}
 
 	getProjects(query) {
@@ -54,6 +60,10 @@ class Database {
 
 	getRedlinings(projectId, query) {
 		return this.dbRedlining.getRedlinings(projectId, query);
+	}
+
+	getFunctions(projectId, query) {
+		return this.dbFunction.getFunctions(projectId, query);
 	}
 }
 

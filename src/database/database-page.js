@@ -10,7 +10,43 @@ class DatabasePage {
   }
 
   getCollection() {
-    return this.database.collection(COLLECTION_PAGE);
+    return this.database.getMongoDatabase().collection(COLLECTION_PAGE);
+  }
+
+  getFunctionQuery(q) {
+    if (!q) {
+      return undefined;
+    }
+    if (q.indexOf("function:") !== 0) {
+      return undefined;
+    }
+
+    let idx = q.indexOf(":");
+    let functionQuery = q.substring(idx + 1);
+    return functionQuery;
+  }
+
+
+  getPagesByFilter(filter, query) {
+    return new Promise((resolve, reject) => {
+      var pages = this.getCollection();
+
+      if (query.meta == 'count') {
+        pages.count(filter, (err, data) => {
+          resolve(data);
+        });
+      } else {
+        pages.find(filter).toArray((err, data) => {
+          if (err) {
+            reject(err);
+          }
+          data = databaseTools.keysToLowerCase(data);
+          data = databaseTools.updateObjectIds(data);
+          data = databaseTools.convertProperties(data);
+          resolve(data);
+        });
+      }
+    });
   }
 
   getPages(projectId, query) {
@@ -19,6 +55,26 @@ class DatabasePage {
       if (!pages) {
         reject("pages not found");
       }
+
+      let functionQuery = this.getFunctionQuery(query.q);
+
+      let pageIdList = [];
+      if (functionQuery) {
+        return this.database.getFunctions(projectId, { q: functionQuery })
+          .then(functions => {
+            pageIdList = functions.map(fct => fct.pageId);
+            let filter = { _id: { $in: pageIdList } };
+            return this.getPagesByFilter(filter, {})
+          })
+          .then((pages) => {
+            resolve(pages);
+          })
+          .catch((err) => {
+            reject(err);
+          })
+      }
+
+      // TODO use getPagesByFilter
 
       let filter = {};
       if (query) {

@@ -1,5 +1,6 @@
 
 var assert = require('assert');
+const escapeStringRegexp = require('escape-string-regexp')
 
 class DatabaseTools {
 	keysToLowerCase(obj) {
@@ -127,6 +128,7 @@ class DatabaseTools {
 		}
 		function oneFilter(name, val) {
 			let f = {};
+			val = escapeStringRegexp(val);
 			f[name] = new RegExp(val, 'i');
 			return f;
 		}

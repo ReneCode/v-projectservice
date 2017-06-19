@@ -45,4 +45,18 @@ describe("pages", () => {
 		});
 	});
 
+	it("should filter pages by query f:text (query on functions)", () => {
+		const options = {
+			params: {
+				q: "function:=+-f1"
+			}
+		}
+		return axios.get(url, options).then((res) => {
+			res.should.be.not.null;
+			res.data.should.be.not.null;;
+			res.data.should.be.a('array');
+			res.data.length.should.be.equal(1);
+		});
+	});
+
 })
