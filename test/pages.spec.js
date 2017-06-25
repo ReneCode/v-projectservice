@@ -3,15 +3,18 @@
 let axios = require('axios')
 let should = require('chai').should();
 
-const PORT = process.env.PORT;
-const host = `http://localhost:${PORT}`;
-
 describe("pages", () => {
-	const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
-	const url = `${host}/api/v1/projects/${projectId}/pages`;
+
+	let PAGE_URL = "";
+
+	before( () => {
+		let host = `http://localhost:${process.env.PORT}`;
+		const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
+		PAGE_URL = `${host}/api/v1/projects/${projectId}/pages`;
+	});
 
 	it("should get pages", () => {
-		return axios.get(url).then((res) => {
+		return axios.get(PAGE_URL).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
 			res.data.should.be.a('array');
@@ -25,7 +28,7 @@ describe("pages", () => {
 				meta: 'count'
 			}
 		}
-		return axios.get(url, options).then((res) => {
+		return axios.get(PAGE_URL, options).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
 			res.data.should.be.equal(3);
@@ -38,7 +41,7 @@ describe("pages", () => {
 				q: "erste"
 			}
 		}
-		return axios.get(url, options).then((res) => {
+		return axios.get(PAGE_URL, options).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
 			res.data.should.be.a('array');
@@ -52,7 +55,7 @@ describe("pages", () => {
 				q: "function:=+-f1"
 			}
 		}
-		return axios.get(url, options).then((res) => {
+		return axios.get(PAGE_URL, options).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
 			res.data.should.be.a('array');

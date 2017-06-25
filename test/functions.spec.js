@@ -6,11 +6,18 @@ const PORT = process.env.PORT;
 const host = `http://localhost:${PORT}`;
 
 describe("functions", () => {
-	const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
-	const url = `${host}/api/v1/projects/${projectId}/functions`;
+
+	let FUNCTION_URL;
+
+	before( () => {
+		let host = `http://localhost:${process.env.PORT}`;
+		const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
+		FUNCTION_URL = `${host}/api/v1/projects/${projectId}/functions`;
+	})
+
 
 	it("should get functions", () => {
-		return axios.get(url).then((res) => {
+		return axios.get(FUNCTION_URL).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
 			res.data.should.be.a('array');
@@ -24,8 +31,7 @@ describe("functions", () => {
 				q: "=+-f"
 			}
 		}
-		return axios.get(url, options).then((res) => {
-			console.log("res.data:", res.data)
+		return axios.get(FUNCTION_URL, options).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
 			res.data.should.be.a('array');

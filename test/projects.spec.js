@@ -2,9 +2,6 @@
 let axios = require('axios');
 let should = require('chai').should();
 
-const PORT = process.env.PORT;
-const host = `http://localhost:${PORT}`;
-
 const prjA = {
 	uniqueId: "750057417",
 	version: "1.0",
@@ -29,9 +26,12 @@ const prjB = {
 
 
 describe("projects", () => {
-	const PROJECT_URL = `${host}/api/v1/projects/`;
+	let PROJECT_URL;
 
 	before("set axios header", () => {
+		let host = `http://localhost:${process.env.PORT}`;
+		PROJECT_URL = `${host}/api/v1/projects`;
+
 		axios.defaults.headers["Content-Type"] = "application/json";
 	});
 
@@ -67,7 +67,7 @@ describe("projects", () => {
 
 	it("get one project", () => {
 		const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
-		const url = `${host}/api/v1/projects/${projectId}`;
+		const url = `${PROJECT_URL}/${projectId}`;
 
 		return axios.get(url).then((res) => {
 			res.should.be.not.null;

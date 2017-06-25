@@ -2,17 +2,22 @@
 let axios = require('axios')
 let should = require('chai').should();
 
-const PORT = process.env.PORT;
-const host = `http://localhost:${PORT}`;
 
 describe("redlinings", () => {
-	const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
-	const url = `${host}/api/v1/projects/${projectId}/redlinings`;
 
+	let REDLINING_URL;
 
+	before(() => {
+		const PORT = process.env.PORT;
+		const host = `http://localhost:${PORT}`;
+
+		const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
+		REDLINING_URL = `${host}/api/v1/projects/${projectId}/redlinings`;
+
+	});
 
 	it("should get all redlinings", () => {
-		return axios.get(url).then((res) => {
+		return axios.get(REDLINING_URL).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
 			res.data.should.be.a('array');
@@ -29,7 +34,7 @@ describe("redlinings", () => {
 				pageTblObjectId: 1
 			}
 		}
-		return axios.get(url, options).then((res) => {
+		return axios.get(REDLINING_URL, options).then((res) => {
 			res.data.forEach(rl => {
 				rl.pageTblObjectId.should.be.equal(1)
 			})
