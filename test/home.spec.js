@@ -2,13 +2,19 @@
 let axios = require('axios');
 let should = require('chai').should();
 
-const PORT = process.env.PORT;
-const host = `http://localhost:${PORT}`;
 
 describe("home", () => {
-	const url = host;
+
+	let URL;
+
+	before( () => {
+		const PORT = process.env.PORT;
+		const host = `http://localhost:${PORT}`;
+		URL = host;
+	});
+
 	it("get", () => {
-		return axios.get(url).then( (res) => {
+		return axios.get(URL).then( (res) => {
 			res.should.be.not.null;
 		})
 	});
