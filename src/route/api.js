@@ -44,7 +44,6 @@ function getPages(req, res) {
 			res.json(pages);
 		})
 		.catch((err) => {
-			console.log(err);
 			res.sendStatus(500);
 		})
 }
@@ -53,6 +52,19 @@ function getPage(projectId, pageId, query, res) {
 	database.getPage(projectId, pageId)
 		.then((page) => {
 			res.json(page);
+		})
+		.catch((err) => {
+			res.sendStatus(500);
+		})
+}
+
+
+function getFunctions(req, res) {
+	const projectId = req.params.projectId;
+
+	database.getFunctions(projectId, req.query)
+		.then((pages) => {
+			res.json(pages);
 		})
 		.catch((err) => {
 			console.log(err);
@@ -77,8 +89,12 @@ function getRedlinings(req, res) {
 router.get("/projects", getProjects);
 router.post("/projects", postProject);
 router.get("/projects/:projectId", (req, res) => getProject(req.params.projectId, res));
+
 router.get("/projects/:projectId/pages", getPages);
 router.get("/projects/:projectId/pages/:pageId", (req, res) => getPage(req.params.projectId, req.params.pageId, req.query, res));
+
+router.get("/projects/:projectId/functions", getFunctions);
+
 
 router.get("/projects/:projectId/redlinings", getRedlinings);
 

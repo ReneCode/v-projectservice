@@ -2,7 +2,7 @@
 let axios = require('axios');
 let should = require('chai').should();
 
-const PORT = 3001;
+const PORT = process.env.PORT;
 const host = `http://localhost:${PORT}`;
 
 const prjA = {
@@ -79,7 +79,7 @@ describe("projects", () => {
 	it("get projects by query string", () => {
 		const options = {
 			params: {
-				q: "ample_Proj"
+				q: "eues Pr"
 			}
 		}
 		return axios.get(PROJECT_URL, options).then((res) => {

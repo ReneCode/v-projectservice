@@ -1,8 +1,10 @@
 var WebServer = require('../src/web-server');
 let database = require('../src/database/database');
 
+process.env.PORT = 3101
+
 const OPTIONS = {
-  port: 3001,
+  port: process.env.PORT,
   authorize: false,
   logging: false
 };
