@@ -39,5 +39,19 @@ describe("functions", () => {
 		});
 	});
 
+	it("should filter functions by 'function:' query string", () => {
+		const options = {
+			params: {
+				q: "function:=+-f"
+			}
+		}
+		return axios.get(FUNCTION_URL, options).then((res) => {
+			res.should.be.not.null;
+			res.data.should.be.not.null;;
+			res.data.should.be.a('array');
+			res.data.length.should.be.equal(4);
+		});
+	});
+
 
 })

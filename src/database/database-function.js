@@ -13,6 +13,18 @@ class DatabaseFunction {
     return this.database.getMongoDatabase().collection(COLLECTION);
   }
 
+
+  getFunctionFilter(q) {
+    if (!q) {
+      return undefined;
+    }
+    if (q.indexOf("function:") === 0) {
+      const idx = q.indexOf(":");
+      return q.substring(idx + 1);
+    }
+    return q;
+  }
+
   getFunctions(projectId, query) {
     return new Promise((resolve, reject) => {
       var functions = this.getCollection();
@@ -20,7 +32,9 @@ class DatabaseFunction {
         reject("functions not found");
       }
 
-      let filter = databaseTools.getFilter(['Properties.Val'], query.q);
+      const filterString = this.getFunctionFilter(query.q);
+
+      let filter = databaseTools.getFilter(['Properties.Val'], filterString);
       filter.ProjectId = projectId;
       functions.find(filter).toArray((err, data) => {
         if (err) {
