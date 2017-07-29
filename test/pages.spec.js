@@ -9,7 +9,8 @@ describe("pages", () => {
 
 	before( () => {
 		let host = `http://localhost:${process.env.PORT}`;
-		const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
+		const projectId = "9949702d-c3e2-4f48-bfdb-f63780bb51cd";
+
 		PAGE_URL = `${host}/api/v1/projects/${projectId}/pages`;
 	});
 
@@ -31,14 +32,14 @@ describe("pages", () => {
 		return axios.get(PAGE_URL, options).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
-			res.data.should.be.equal(3);
+			res.data.should.be.equal(214);
 		});
 	});
 
 	it("should filter pages by query string", () => {
 		const options = {
 			params: {
-				q: "erste"
+				q: "einspeisung"
 			}
 		}
 		return axios.get(PAGE_URL, options).then((res) => {
@@ -52,7 +53,7 @@ describe("pages", () => {
 	it("should filter pages by query f:text (query on functions)", () => {
 		const options = {
 			params: {
-				q: "function:=+-f1"
+				q: "function:-fa1"
 			}
 		}
 		return axios.get(PAGE_URL, options).then((res) => {

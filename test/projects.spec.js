@@ -66,7 +66,7 @@ describe("projects", () => {
 	*/
 
 	it("get one project", () => {
-		const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
+		const projectId = "9949702d-c3e2-4f48-bfdb-f63780bb51cd";
 		const url = `${PROJECT_URL}/${projectId}`;
 
 		return axios.get(url).then((res) => {

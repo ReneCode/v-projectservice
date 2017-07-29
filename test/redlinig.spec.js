@@ -11,7 +11,7 @@ describe("redlinings", () => {
 		const PORT = process.env.PORT;
 		const host = `http://localhost:${PORT}`;
 
-		const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
+		const projectId = "d336e8c7-e93f-41ab-add6-87c2088656f4";
 		REDLINING_URL = `${host}/api/v1/projects/${projectId}/redlinings`;
 
 	});

@@ -11,7 +11,7 @@ describe("functions", () => {
 
 	before( () => {
 		let host = `http://localhost:${process.env.PORT}`;
-		const projectId = "fb56fdb2-135f-4aae-8a4e-a0a3d9a8e7e3";
+		const projectId = "9949702d-c3e2-4f48-bfdb-f63780bb51cd";
 		FUNCTION_URL = `${host}/api/v1/projects/${projectId}/functions`;
 	})
 
@@ -28,28 +28,28 @@ describe("functions", () => {
 	it("should filter functions by query string", () => {
 		const options = {
 			params: {
-				q: "=+-f"
+				q: "-fa1"
 			}
 		}
 		return axios.get(FUNCTION_URL, options).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
 			res.data.should.be.a('array');
-			res.data.length.should.be.equal(4);
+			res.data.length.should.be.least(1);
 		});
 	});
 
 	it("should filter functions by 'function:' query string", () => {
 		const options = {
 			params: {
-				q: "function:=+-f"
+				q: "function:-fa1"
 			}
 		}
 		return axios.get(FUNCTION_URL, options).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;;
 			res.data.should.be.a('array');
-			res.data.length.should.be.equal(4);
+			res.data.length.should.be.least(1);
 		});
 	});
 
