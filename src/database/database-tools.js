@@ -61,7 +61,7 @@ class DatabaseTools {
 		if (obj.properties) {
 			let props = {};
 			obj.properties.forEach(p => {
-				props[p._id] = p.Val;
+				props[p.id] = p.val;
 			});
 			obj.properties = props;
 		}

@@ -7,7 +7,7 @@ let DatabaseRedlining = require('./database-redlining');
 let DatabaseFunction = require('./database-function');
 
 // dev stage
-const DATABASE_NAME = "dev_dbprojects-6d6cb5cd-90b8-4f86-b173-828dbf6b9b12";
+const DATABASE_NAME = "v-project";
 
 // var COLLECTION_DATA = "data";
 

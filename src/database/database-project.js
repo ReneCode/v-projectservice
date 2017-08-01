@@ -73,10 +73,6 @@ class DatabaseProject {
         if (err) {
           reject(err);
         }
-        data = databaseTools.keysToLowerCase(data);
-        data = databaseTools.updateObjectIds(data);
-        data = databaseTools.convertProperties(data);
-
         resolve(data);
       });
     })
