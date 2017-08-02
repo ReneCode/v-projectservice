@@ -40,9 +40,7 @@ class DatabasePage {
           if (err) {
             reject(err);
           }
-          data = databaseTools.keysToLowerCase(data);
-          data = databaseTools.updateObjectIds(data);
-          data = databaseTools.convertProperties(data);
+          data = databaseTools.convertObjects(data);
           resolve(data);
         });
       }
@@ -56,6 +54,9 @@ class DatabasePage {
         reject("pages not found");
       }
 
+      if (!query) {
+        query = {};
+      }
       let functionQuery = this.getFunctionQuery(query.q);
 
       let pageIdList = [];
@@ -67,7 +68,7 @@ class DatabasePage {
             return this.getPagesByFilter(filter, {})
           })
           .then((pages) => {
-            pages = databaseTools.convertProperties(pages);
+            pages = databaseTools.convertObjects(pages);
             resolve(pages);
           })
           .catch((err) => {
@@ -82,7 +83,7 @@ class DatabasePage {
         filter = databaseTools.getFilter(['properties.val'], query.q);
       }
 
-      filter["projectId"] = projectId;
+      filter.projectId = projectId;
 
       if (query.meta == 'count') {
         pages.count(filter, (err, data) => {
@@ -93,7 +94,7 @@ class DatabasePage {
           if (err) {
             reject(err);
           }
-          data = databaseTools.convertProperties(data);
+          data = databaseTools.convertObjects(data);
           resolve(data);
         });
       }
@@ -111,7 +112,7 @@ class DatabasePage {
         if (err) {
           reject(err);
         }
-        data = databaseTools.convertProperties(data);
+        data = databaseTools.convertObjects(data);
         resolve(data);
       });
     })

@@ -31,18 +31,19 @@ class DatabaseFunction {
       if (!functions) {
         reject("functions not found");
       }
+      if (!query) {
+        query = {};
+      }
 
       const filterString = this.getFunctionFilter(query.q);
 
-      let filter = databaseTools.getFilter(['Properties.Val'], filterString);
-      filter.ProjectId = projectId;
+      let filter = databaseTools.getFilter(['properties.val'], filterString);
+      filter.projectId = projectId;
       functions.find(filter).toArray((err, data) => {
         if (err) {
           reject(err);
         }
-        data = databaseTools.keysToLowerCase(data);
-        data = databaseTools.updateObjectIds(data);
-        data = databaseTools.convertProperties(data);
+        data = databaseTools.convertObjects(data);
 
         resolve(data);
       });

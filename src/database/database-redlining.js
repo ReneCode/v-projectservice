@@ -1,7 +1,7 @@
 
 var databaseTools = require('./database-tools');
 
-var COLLECTION_REDLINING = "redlining";
+var COLLECTION_REDLINING = "redlinings";
 
 class DatabaseRedlining {
 
@@ -35,7 +35,7 @@ class DatabaseRedlining {
       let pageTblObjectId = this.getQueryValue(query, 'pageTblObjectId');
       let translateY = this.getQueryValue(query, 'translateY');
       let filter = {
-        ProjectId: projectId
+        projectId: projectId
       };
       if (pageTblObjectId !== undefined) {
         filter.PageTblObjectId = parseInt(pageTblObjectId);
@@ -45,12 +45,10 @@ class DatabaseRedlining {
         if (err) {
           reject(err);
         }
-        data = databaseTools.keysToLowerCase(data);
-        data = databaseTools.updateObjectIds(data);
-        data = databaseTools.convertProperties(data);
+        data = databaseTools.convertObjects(data);
         
-        data = databaseTools.convertRedlinings(data, {
-          translateY: translateY
+        data.forEach(r => {
+          r.y = translateY - r.y
         });
 
         resolve(data);

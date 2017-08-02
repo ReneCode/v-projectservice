@@ -6,10 +6,7 @@ let DatabaseProject = require('./database-project');
 let DatabaseRedlining = require('./database-redlining');
 let DatabaseFunction = require('./database-function');
 
-// dev stage
 const DATABASE_NAME = "v-project";
-
-// var COLLECTION_DATA = "data";
 
 class Database {
 	constructor() {

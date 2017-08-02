@@ -11,7 +11,7 @@ describe("functions", () => {
 
 	before( () => {
 		let host = `http://localhost:${process.env.PORT}`;
-		const projectId = "9949702d-c3e2-4f48-bfdb-f63780bb51cd";
+		const projectId = "3e0f8622-1dec-4d5d-b956-c23e8973103d";
 		FUNCTION_URL = `${host}/api/v1/projects/${projectId}/functions`;
 	})
 
@@ -19,7 +19,7 @@ describe("functions", () => {
 	it("should get functions", () => {
 		return axios.get(FUNCTION_URL).then((res) => {
 			res.should.be.not.null;
-			res.data.should.be.not.null;;
+			res.data.should.be.not.null;
 			res.data.should.be.a('array');
 			res.data.length.should.be.at.least(1);
 		});
