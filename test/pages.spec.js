@@ -23,6 +23,17 @@ describe("pages", () => {
 		});
 	});
 
+	it("should get one page", ()=> {
+		let pageId = "a24fb442-449c-4c62-b814-ab216addd87b";
+		return axios.get(PAGE_URL + "/" + pageId).then((res) => {
+			res.should.not.be.null;
+			res.data.should.not.be.null;
+			res.data.should.be.a("object");
+			res.data.id.should.be.equal(pageId);
+		})
+
+	})
+
 	it("should count pages", () => {
 		const options = {
 			params: {

@@ -107,7 +107,7 @@ class DatabasePage {
       if (!pages) {
         reject("pages not found");
       }
-      let filter = { ProjectId: projectId, _id: pageId };
+      let filter = { projectId: projectId, _id: pageId };
       pages.findOne(filter, (err, data) => {
         if (err) {
           reject(err);
