@@ -43,30 +43,31 @@ describe("projects", () => {
 		});
 	});
 
-/*
-	it("should post one project", () => {
-		return axios.post(PROJECT_URL, prjA).then((res) => {
-			res.should.be.not.null;
-			const data = res.data;
-			data.should.be.not.null;
-			data.should.be.a('object');
-			data.should.have.property('_id');
+	/*
+		it("should post one project", () => {
+			return axios.post(PROJECT_URL, prjA).then((res) => {
+				res.should.be.not.null;
+				const data = res.data;
+				data.should.be.not.null;
+				data.should.be.a('object');
+				data.should.have.property('_id');
+			})
 		})
-	})
-
-		it("should post array of projects", () => {
-		return axios.post(PROJECT_URL, [prjA,prjB]).then((res) => {
-			res.should.be.not.null;
-			const data = res.data;
-			data.should.be.not.null;
-			data.should.be.a('array');
-			data.length.should.be.equal(2);
+	
+			it("should post array of projects", () => {
+			return axios.post(PROJECT_URL, [prjA,prjB]).then((res) => {
+				res.should.be.not.null;
+				const data = res.data;
+				data.should.be.not.null;
+				data.should.be.a('array');
+				data.length.should.be.equal(2);
+			})
 		})
-	})
-	*/
+		*/
 
 	it("get one project", () => {
-		const projectId = "9949702d-c3e2-4f48-bfdb-f63780bb51cd";
+		const projectId = "4300cc5a-19d0-4b4f-8f60-f8e8b02bbdd1";
+
 		const url = `${PROJECT_URL}/${projectId}`;
 
 		return axios.get(url).then((res) => {
@@ -79,14 +80,14 @@ describe("projects", () => {
 	it("get projects by query string", () => {
 		const options = {
 			params: {
-				q: "eues Pr"
+				q: "ampl"
 			}
 		}
 		return axios.get(PROJECT_URL, options).then((res) => {
 			res.should.be.not.null;
 			res.data.should.be.not.null;
 			res.data.should.be.a('array');
-			res.data.length.should.be.equal(1);
+			res.data.length.should.be.least(1);
 		})
 	});
 })

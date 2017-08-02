@@ -38,7 +38,7 @@ class DatabaseRedlining {
         projectId: projectId
       };
       if (pageTblObjectId !== undefined) {
-        filter.PageTblObjectId = parseInt(pageTblObjectId);
+        filter.pageTblObjectId = parseInt(pageTblObjectId);
       }
 
       redlinings.find(filter).toArray((err, data) => {

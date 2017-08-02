@@ -21,7 +21,7 @@ class DatabaseProject {
       }
       let filter = {};
       if (query) {
-        filter = databaseTools.getFilter(['Name', 'Version', 'Description'], query.q);
+        filter = databaseTools.getFilter(['name', 'version', 'description'], query.q);
       }
       projects.find(filter).toArray((err, data) => {
         if (err) {

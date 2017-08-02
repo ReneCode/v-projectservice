@@ -36,7 +36,6 @@ class DatabaseFunction {
       }
 
       const filterString = this.getFunctionFilter(query.q);
-
       let filter = databaseTools.getFilter(['properties.val'], filterString);
       filter.projectId = projectId;
       functions.find(filter).toArray((err, data) => {

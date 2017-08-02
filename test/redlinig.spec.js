@@ -11,7 +11,7 @@ describe("redlinings", () => {
 		const PORT = process.env.PORT;
 		const host = `http://localhost:${PORT}`;
 
-		const projectId = "d336e8c7-e93f-41ab-add6-87c2088656f4";
+		const projectId = "4300cc5a-19d0-4b4f-8f60-f8e8b02bbdd1";
 		REDLINING_URL = `${host}/api/v1/projects/${projectId}/redlinings`;
 
 	});
@@ -28,16 +28,14 @@ describe("redlinings", () => {
 		});
 	});
 
-	it("should get redlinings from one page", () => {
+	it("should get one redlinings on specific page", () => {
 		let options = {
 			params: {
-				pageTblObjectId: 1
+				pageTblObjectId: 21
 			}
 		}
 		return axios.get(REDLINING_URL, options).then((res) => {
-			res.data.forEach(rl => {
-				rl.pageTblObjectId.should.be.equal(1)
-			})
+			res.data.length.should.be.equal(1)
 		});
 	});
 
