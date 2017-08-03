@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
+let routerGraphics = require('./router-graphics')
 var database = require('../database/database');
 
 function getProjects(req, res) {
@@ -97,6 +98,11 @@ router.get("/projects/:projectId/functions", getFunctions);
 
 
 router.get("/projects/:projectId/redlinings", getRedlinings);
+
+
+router.get("/projects/:projectId/redlinings", getRedlinings);
+
+router.use("/", routerGraphics);
 
 module.exports = router;
 

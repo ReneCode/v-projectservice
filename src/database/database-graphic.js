@@ -93,12 +93,16 @@ class DatabaseGraphic {
       }
       if (Array.isArray(graphic)) {
         for (let g of graphic) {
-          g.pageId = pageId;
           g.projectId = projectId;
+          if (pageId) {
+            g.pageId = pageId;
+          }
         }
       } else {
-        graphic.pageId = pageId;
         graphic.projectId = projectId;
+        if (pageId) {
+          graphic.pageId = pageId;
+        }
       }
       graphics.insert(graphic, (err, data) => {
         if (err) {

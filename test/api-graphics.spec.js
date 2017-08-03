@@ -3,7 +3,7 @@ let axios = require('axios')
 let should = require('chai').should();
 
 
-describe("graphics", () => {
+describe.only("graphics", () => {
 
 	let GRAPHIC_URL;
 
@@ -15,6 +15,43 @@ describe("graphics", () => {
 		GRAPHIC_URL = `${host}/api/v1/projects/${projectId}/graphics`;
 
 	});
+
+
+	it('should post graphic', () => {
+		const data = {
+			type: "rect",
+			x: 50,
+			y: 100
+		};
+		return axios.post(GRAPHIC_URL, data)
+			.then(res => {
+				res.should.be.not.null;
+				res.status.should.be.equal(200);
+				res.data.length.should.be.equal(1);
+				res.data[0].type.should.be.equal(data.type);
+			})
+	})
+
+	xit('should get graphic', () => {
+		const data = {
+			type: "text",
+			text: "hi",
+			y: 10
+		};
+		let graphicId;
+		return axios.post(GRAPHIC_URL, data)
+			.then(res => {
+				graphicId = res.data[0]._id;
+				return axios.get(GRAPHIC_URL + "/" + graphicId);
+			})
+			.then(res => {
+				res.should.be.not.null;
+				res.status.should.be.equal(200);
+				res.data.length.should.be.equal(1);
+				res.data[0].type.should.be.equal(data.type);
+			})
+	})
+
 
 	/*
 	it("should get all redlinings", () => {
