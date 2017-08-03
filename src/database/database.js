@@ -5,6 +5,7 @@ let DatabasePage = require('./database-page');
 let DatabaseProject = require('./database-project');
 let DatabaseRedlining = require('./database-redlining');
 let DatabaseFunction = require('./database-function');
+let DatabaseGraphic = require('./database-graphic');
 
 const DATABASE_NAME = "v-project";
 
@@ -25,6 +26,7 @@ class Database {
 				this.dbProject = new DatabaseProject(this);
 				this.dbRedlining = new DatabaseRedlining(this);
 				this.dbFunction = new DatabaseFunction(this);
+				this.dbGraphic = new DatabaseGraphic(this);
 
 				resolve(this.mongoDatabase);
 			})
