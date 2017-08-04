@@ -26,7 +26,7 @@ class DatabaseGraphic {
       }
       let filter = {
         projectId: projectId,
-        _id: graphicId
+        _id: ObjectID(graphicId)
       }
       collection.findOneAndUpdate(filter, replacement, { returnOriginal: false }, (err, data) => {
         if (err) {
@@ -50,7 +50,7 @@ class DatabaseGraphic {
         projectId: projectId
       }
       if (graphicId) {
-        filter._id = graphicId;
+        filter._id = ObjectID(graphicId);
       }
       collection.remove(filter, (err, data) => {
         if (err) {

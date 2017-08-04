@@ -1,5 +1,5 @@
 
-let should = require('chai').should();
+require('chai').should();
 
 const database = require('../src/database/database');
 
@@ -160,19 +160,28 @@ describe('Database graphic', () => {
     let graphicId;
     return database.dbGraphic.save(projectId, pageId, graphic)
       .then(data => {
-        let obj = data.ops[0];
         graphicId = data.ops[0]._id;
-        obj.width = 50;
-        obj.x = 120;
-        return database.dbGraphic.update(projectId, graphicId, obj)
+        let newGraphic = {
+          width: 50,
+          type: "text",
+          projectId: projectId
+        };
+        return database.dbGraphic.update(projectId, graphicId, newGraphic)
       })
       .then(data => {
         const o = data.value;
         o.should.not.be.null;
-        o.type.should.be.equal("rect")
-        o.x.should.be.equal(120);
-        o.y.should.be.equal(200);
+        o.type.should.be.equal("text")
         o.width.should.be.equal(50);
+        o._id.should.be.deep.equal(graphicId);
+        return database.dbGraphic.load(projectId, { graphicId: graphicId });
+      })
+      .then(data => {
+        const o = data[0];
+        o.should.not.be.null;
+        o.type.should.be.equal("text")
+        o.width.should.be.equal(50);
+        o._id.should.be.deep.equal(graphicId);
       });
   })
 })

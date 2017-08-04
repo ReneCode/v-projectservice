@@ -37,10 +37,24 @@ function getGraphicsWithId(req, res) {
   }
   database.dbGraphic.load(projectId, filter)
     .then(data => {
-      if (data.length !== 1) {
+      res.json(data);
+    })
+    .catch(err => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+}
+
+function putGraphics(req, res) {
+  const graphics = req.body;
+  const projectId = req.params.projectId;
+  const graphicId = req.params.graphicId;
+  database.dbGraphic.update(projectId, graphicId, graphics)
+    .then(data => {
+      if (data.ok !== 1) {
         res.sendStatus(500);
       } else {
-        res.json(data[0]);
+        res.json(data.value);
       }
     })
     .catch(err => {
@@ -49,8 +63,26 @@ function getGraphicsWithId(req, res) {
     });
 }
 
+function deleteGraphics(req, res) {
+  const projectId = req.params.projectId;
+  const graphicId = req.params.graphicId;
+  database.dbGraphic.remove(projectId, graphicId)
+    .then(data => {
+      res.sendStatus(204);
+    })
+    .catch(err => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+}
+
 router.post("/projects/:projectId/graphics", postGraphics);
+
 router.get("/projects/:projectId/graphics", getGraphics);
 router.get("/projects/:projectId/graphics/:graphicId", getGraphicsWithId);
+
+router.put("/projects/:projectId/graphics/:graphicId", putGraphics);
+
+router.delete("/projects/:projectId/graphics/:graphicId", deleteGraphics);
 
 module.exports = router;

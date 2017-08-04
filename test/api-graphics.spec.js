@@ -4,16 +4,17 @@ require('chai').should();
 
 describe("graphics REST interface", () => {
   let GRAPHIC_URL;
+  let PROJECT_ID;
 
   before(() => {
     const PORT = process.env.PORT;
     const host = `http://localhost:${PORT}`;
 
-    const projectId = "4300cc5a-19d0-4b4f-8f60-f8e8b02bbdd1";
-    GRAPHIC_URL = `${host}/api/v1/projects/${projectId}/graphics`;
+    PROJECT_ID = "4300cc5a-19d0-4b4f-8f60-f8e8b02bbdd1";
+    GRAPHIC_URL = `${host}/api/v1/projects/${PROJECT_ID}/graphics`;
   });
 
-  it('should post graphic', () => {
+  it('should POST graphic', () => {
     const data = {
       type: "rect",
       x: 50,
@@ -28,7 +29,7 @@ describe("graphics REST interface", () => {
       })
   })
 
-  it('should get all graphics', () => {
+  it('should GET all graphics', () => {
     const data = [{
       type: "text-1",
       val: 1234
@@ -51,7 +52,7 @@ describe("graphics REST interface", () => {
       })
   })
 
-  it('should get graphic by id', () => {
+  it('should GET graphic by id', () => {
     const data = {
       type: "text",
       text: "hi",
@@ -66,32 +67,70 @@ describe("graphics REST interface", () => {
       .then(res => {
         res.should.be.not.null;
         res.status.should.be.equal(200);
-        res.data.type.should.be.equal(data.type);
+        res.data.length.should.be.equal(1);
+        let o = res.data[0];
+        o.type.should.be.equal(data.type);
+        o.y.should.be.equal(data.y);
       })
   })
 
-  /*
-  it("should get all redlinings", () => {
-    return axios.get(REDLINING_URL).then((res) => {
-      res.should.be.not.null;
-      res.data.should.be.not.null;;
-      res.data.should.be.a('array');
-      res.data.length.should.be.at.least(1);
-      res.data.forEach(rl => {
-        rl.should.have.property('pageTblObjectId');
+  it('should PUT graphics', () => {
+    const data = {
+      type: "text",
+      text: "hi",
+      y: 10
+    };
+    let graphicId;
+    return axios.post(GRAPHIC_URL, data)
+      .then(res => {
+        graphicId = res.data[0]._id;
+        const newData = {
+          projectId: PROJECT_ID,
+          type: "rect",
+          x: 200
+        }
+        return axios.put(GRAPHIC_URL + "/" + graphicId, newData);
       })
-    });
-  });
+      .then(res => {
+        res.should.be.not.null;
+        res.status.should.be.equal(200);
+        res.data.should.have.property("type", "rect");
+        res.data.should.have.property("x", 200);
+        res.data.should.not.have.property("y");
+        return axios.get(GRAPHIC_URL + "/" + graphicId);
+      })
+      .then(res => {
+        res.status.should.be.equal(200);
+        res.data.length.should.be.equal(1);
+        let o = res.data[0];
+        o.should.have.property("type", "rect");
+        o.should.have.property("x", 200);
+        o.should.not.have.property("text");
+      })
+  })
 
-  it("should get one redlinings on specific page", () => {
-    let options = {
-      params: {
-        pageTblObjectId: 21
-      }
-    }
-    return axios.get(REDLINING_URL, options).then((res) => {
-      res.data.length.should.be.equal(1)
-    });
-  });
-*/
+  it('should DELETE graphics', () => {
+    const data = {
+      type: "text",
+      text: "hi delete",
+      y: 10
+    };
+    let graphicId;
+    return axios.post(GRAPHIC_URL, data)
+      .then(res => {
+        graphicId = res.data[0]._id;
+        return axios.delete(GRAPHIC_URL + "/" + graphicId);
+      })
+      .then(res => {
+        res.should.be.not.null;
+        res.status.should.be.equal(204);
+        return axios.get(GRAPHIC_URL + "/" + graphicId);
+      })
+      .then(res => {
+        // should be not found
+        res.status.should.be.equal(200);
+        res.data.should.be.a("array")
+        res.data.length.should.be.equal(0)
+      })
+  })
 })

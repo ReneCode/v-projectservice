@@ -29,7 +29,7 @@ class DatabaseRedlining {
     return new Promise((resolve, reject) => {
       var redlinings = this.getCollection();
       if (!redlinings) {
-        reject("redlinings not found");
+        reject(new Error("redlinings not found"));
       }
 
       let pageTblObjectId = this.getQueryValue(query, 'pageTblObjectId');
