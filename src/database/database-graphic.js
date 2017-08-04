@@ -1,10 +1,9 @@
 
-var databaseTools = require('./database-tools');
+let ObjectID = require('mongodb').ObjectID;
 
 var COLLECTION_GRAPHIC = "graphics";
 
 class DatabaseGraphic {
-
   constructor(database) {
     this.database = database;
   }
@@ -17,13 +16,13 @@ class DatabaseGraphic {
     return new Promise((resolve, reject) => {
       let collection = this.getCollection();
       if (!collection) {
-        reject("graphics not found");
+        reject(new Error("graphics not found"));
       }
       if (!projectId) {
-        reject("projectId missing");
+        reject(new Error("projectId missing"));
       }
       if (!graphicId) {
-        reject("graphicId missing");
+        reject(new Error("graphicId missing"));
       }
       let filter = {
         projectId: projectId,
@@ -42,10 +41,10 @@ class DatabaseGraphic {
     return new Promise((resolve, reject) => {
       let collection = this.getCollection();
       if (!collection) {
-        reject("graphics not found");
+        reject(new Error("graphics not found"));
       }
       if (!projectId) {
-        reject("projectId missing");
+        reject(new Error("projectId missing"));
       }
       let filter = {
         projectId: projectId
@@ -62,21 +61,40 @@ class DatabaseGraphic {
     });
   }
 
-  load(projectId, pageId) {
+  /*
+    filter:
+      - pageId
+      - graphicId
+  */
+  load(projectId, filter) {
     return new Promise((resolve, reject) => {
       var graphics = this.getCollection();
       if (!graphics) {
-        reject("graphics not found");
+        reject(new Error("graphics not found"));
       }
 
-      let filter = {
+      let dbFilter = {
         projectId: projectId
       };
-      if (pageId) {
-        filter.pageId = pageId;
+      for (let filterField in filter) {
+        switch (filterField) {
+          case "pageId":
+            if (!filter.pageId) {
+              reject(new Error("filter pageId empty"));
+            }
+            dbFilter.pageId = filter.pageId;
+            break;
+          case "graphicId":
+            if (!filter.graphicId) {
+              reject(new Error("filter graphicId empty"));
+            }
+            dbFilter._id = ObjectID(filter.graphicId);
+            break;
+          default:
+            reject(new Error("invalid filter field: " + filterField));
+        }
       }
-
-      graphics.find(filter).toArray((err, data) => {
+      graphics.find(dbFilter).toArray((err, data) => {
         if (err) {
           reject(err);
         }
@@ -89,7 +107,7 @@ class DatabaseGraphic {
     return new Promise((resolve, reject) => {
       var graphics = this.getCollection();
       if (!graphics) {
-        reject("graphics not found");
+        reject(new Error("graphics not found"));
       }
       if (Array.isArray(graphic)) {
         for (let g of graphic) {

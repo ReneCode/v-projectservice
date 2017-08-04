@@ -4,7 +4,6 @@ var databaseTools = require('./database-tools');
 var COLLECTION_PAGE = "pages";
 
 class DatabasePage {
-
   constructor(database) {
     this.database = database;
   }
@@ -26,13 +25,15 @@ class DatabasePage {
     return functionQuery;
   }
 
-
   getPagesByFilter(filter, query) {
     return new Promise((resolve, reject) => {
       var pages = this.getCollection();
 
-      if (query.meta == 'count') {
+      if (query.meta === 'count') {
         pages.count(filter, (err, data) => {
+          if (err) {
+            reject(err);
+          }
           resolve(data);
         });
       } else {
@@ -51,7 +52,7 @@ class DatabasePage {
     return new Promise((resolve, reject) => {
       var pages = this.getCollection();
       if (!pages) {
-        reject("pages not found");
+        reject(new Error("pages not found"));
       }
 
       if (!query) {
@@ -85,8 +86,11 @@ class DatabasePage {
 
       filter.projectId = projectId;
 
-      if (query.meta == 'count') {
+      if (query.meta === 'count') {
         pages.count(filter, (err, data) => {
+          if (err) {
+            reject(err);
+          }
           resolve(data);
         });
       } else {
@@ -105,7 +109,7 @@ class DatabasePage {
     return new Promise((resolve, reject) => {
       var pages = this.getCollection();
       if (!pages) {
-        reject("pages not found");
+        reject(new Error("pages not found"));
       }
       let filter = { projectId: projectId, _id: pageId };
       pages.findOne(filter, (err, data) => {
@@ -117,7 +121,6 @@ class DatabasePage {
       });
     })
   }
-
 }
 
 module.exports = DatabasePage;

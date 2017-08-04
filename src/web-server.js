@@ -12,66 +12,64 @@ var routeHome = require('./route/home');
 var routeApi = require('./route/api');
 
 class WebServer {
+  constructor(options) {
+    if (!options) {
+      throw new Error("options missing")
+    }
+    this.options = options;
+    if (this.options.authorize === undefined) this.options.authorize = true;
+    if (this.options.logging === undefined) this.options.logging = true;
+  }
 
-	constructor(options) {
-		if (!options) {
-			throw new Error("options missing")
-		}
-		this.options = options;
-		if (this.options.authorize === undefined) this.options.authorize = true;
-		if (this.options.logging === undefined) this.options.logging = true;
-	}
+  listen() {
+    return new Promise((resolve, reject) => {
+      if (!this.options.port) {
+        reject(new Error("port not set"));
+      }
+      var api = this.server.listen(this.options.port, () => {
+        resolve(api);
+      });
+    });
+  }
 
-	listen() {
-		return new Promise((resolve, reject) => {
-			if (!this.options.port) {
-				reject("port not set");
-			}
-			var api = this.server.listen(this.options.port, () => {
-				resolve(api);
-			});
-		});
-	}
+  createServer() {
+    var app = express();
 
-	createServer() {
+    const AUTH0_SECRET = process.env.AUTH0_SECRET;
+    const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE;
 
-		var app = express();
+    if (!AUTH0_SECRET || !AUTH0_AUDIENCE) {
+      throw Error("Auth configuration missing.")
+    }
 
-		const AUTH0_SECRET = process.env.AUTH0_SECRET;
-		const AUTH0_AUDIENCE = process.env.AUTH0_AUDIENCE;
+    var authCheck = jwt({
+      secret: Buffer.from(AUTH0_SECRET), // new Buffer(AUTH0_SECRET),
+      audience: AUTH0_AUDIENCE
+    })
 
-		if (!AUTH0_SECRET || !AUTH0_AUDIENCE) {
-			throw Error("Auth configuration missing.")
-		}
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(cors());
 
-		var authCheck = jwt({
-			secret: new Buffer(AUTH0_SECRET),
-			audience: AUTH0_AUDIENCE
-		})
+    if (this.options.logging) {
+      app.use(logger('dev'));
+    }
 
-		app.use(bodyParser.json());
-		app.use(bodyParser.urlencoded({ extended: true }));
-		app.use(cors());
+    app.use("/", routeHome);
 
-		if (this.options.logging) {
-			app.use(logger('dev'));
-		}
+    if (this.options.authorize) {
+      app.use(authCheck);
+    }
+    app.use("/api/v1/", routeApi);
 
-		app.use("/", routeHome);
+    this.server = http.createServer(app);
 
-		if (this.options.authorize) {
-			app.use(authCheck);
-		}
-		app.use("/api/v1/", routeApi);
-
-		this.server = http.createServer(app);
-
-		this.server.on('close', () => {
-			if (this.options.logging) {
-				console.log("server closed");
-			}
-		})
-	}
+    this.server.on('close', () => {
+      if (this.options.logging) {
+        console.log("server closed");
+      }
+    })
+  }
 }
 
 module.exports = WebServer;

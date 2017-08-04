@@ -8,7 +8,7 @@ const OPTIONS = {
   authorize: false,
   logging: false
 };
-let API = undefined;
+let API;
 
 /*
   start & stop the backend server for the mocha tests
@@ -17,7 +17,6 @@ let API = undefined;
 */
 
 before('start server', () => {
-
   const mongoConnectionString = process.env.DV_MONGO_URI;
   return database.connect(mongoConnectionString)
     .then(() => {

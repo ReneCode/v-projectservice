@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "lint": "eslint src/**/*.js",
     "start": "node src/app.js",
     "start:w": "nodemon src/app.js",
     "test": "mocha",
@@ -22,8 +23,14 @@
   },
   "devDependencies": {
     "axios": "^0.16.2",
+    "babel-eslint": "^7.2.3",
     "chai": "^3.5.0",
     "eslint": "^4.3.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0"
   }
