@@ -1,4 +1,6 @@
 
+const databaseTools = require('./database-tools');
+
 let ObjectID = require('mongodb').ObjectID;
 
 var COLLECTION_GRAPHIC = "graphics";
@@ -14,6 +16,7 @@ class DatabaseGraphic {
 
   update(projectId, graphicId, replacement) {
     return new Promise((resolve, reject) => {
+      databaseTools.removePropertyId(replacement);
       let collection = this.getCollection();
       if (!collection) {
         reject(new Error("graphics not found"));
@@ -32,7 +35,8 @@ class DatabaseGraphic {
         if (err) {
           reject(err);
         }
-        resolve(data);
+        databaseTools.convertProperty_id2id(data.value);
+        resolve(data.value);
       });
     });
   }
@@ -98,6 +102,7 @@ class DatabaseGraphic {
         if (err) {
           reject(err);
         }
+        databaseTools.convertProperty_id2id(data);
         resolve(data);
       });
     })
@@ -109,6 +114,7 @@ class DatabaseGraphic {
       if (!graphics) {
         reject(new Error("graphics not found"));
       }
+      databaseTools.removePropertyId(graphic);
       if (Array.isArray(graphic)) {
         for (let g of graphic) {
           g.projectId = projectId;
@@ -126,7 +132,8 @@ class DatabaseGraphic {
         if (err) {
           reject(err);
         }
-        resolve(data);
+        databaseTools.convertProperty_id2id(data.ops);
+        resolve(data.ops);
       });
     });
   }

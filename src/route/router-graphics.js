@@ -10,7 +10,7 @@ function postGraphics(req, res) {
   const pageId = req.query.pageId;
   database.dbGraphic.save(projectId, pageId, graphics)
     .then((data) => {
-      res.json(data.ops);
+      res.json(data);
     })
     .catch(err => {
       console.error(err);
@@ -52,11 +52,7 @@ function putGraphics(req, res) {
   const graphicId = req.params.graphicId;
   database.dbGraphic.update(projectId, graphicId, graphics)
     .then(data => {
-      if (data.ok !== 1) {
-        res.sendStatus(500);
-      } else {
-        res.json(data.value);
-      }
+      res.json(data);
     })
     .catch(err => {
       console.error(err);

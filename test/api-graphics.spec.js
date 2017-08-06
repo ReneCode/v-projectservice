@@ -61,7 +61,7 @@ describe("graphics REST interface", () => {
     let graphicId;
     return axios.post(GRAPHIC_URL, data)
       .then(res => {
-        graphicId = res.data[0]._id;
+        graphicId = res.data[0].id;
         return axios.get(GRAPHIC_URL + "/" + graphicId);
       })
       .then(res => {
@@ -110,7 +110,7 @@ describe("graphics REST interface", () => {
     let graphicId;
     return axios.post(GRAPHIC_URL, data)
       .then(res => {
-        graphicId = res.data[0]._id;
+        graphicId = res.data[0].id;
         const newData = {
           projectId: PROJECT_ID,
           type: "rect",
@@ -145,7 +145,7 @@ describe("graphics REST interface", () => {
     let graphicId;
     return axios.post(GRAPHIC_URL, data)
       .then(res => {
-        graphicId = res.data[0]._id;
+        graphicId = res.data[0].id;
         return axios.delete(GRAPHIC_URL + "/" + graphicId);
       })
       .then(res => {

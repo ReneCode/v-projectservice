@@ -24,12 +24,14 @@ describe('Database graphic', () => {
     return database.dbGraphic.save(projectId, pageId, graphic)
       .then(data => {
         data.should.be.not.null;
-        data.ops.length.should.be.equal(1);
-        const o = data.ops[0];
+        data.length.should.be.equal(1);
+        const o = data[0];
         o.should.not.be.null;
         o.type.should.be.equal(graphic.type);
         o.projectId.should.be.equal(projectId);
         o.pageId.should.be.equal(pageId);
+        o.should.have.property("id");
+        o.should.not.have.property("_id");
       })
   })
 
@@ -48,17 +50,42 @@ describe('Database graphic', () => {
     return database.dbGraphic.save(projectId, pageId, graphics)
       .then(data => {
         data.should.be.not.null;
-        data.ops.length.should.be.equal(2);
-        const o1 = data.ops[0];
+        data.length.should.be.equal(2);
+        const o1 = data[0];
         o1.should.not.be.null;
         o1.type.should.be.equal(graphics[0].type);
         o1.projectId.should.be.equal(projectId);
         o1.pageId.should.be.equal(pageId);
-        const o2 = data.ops[1];
+        o1.should.have.property("id");
+        o1.should.not.have.property("_id");
+
+        const o2 = data[1];
         o2.should.not.be.null;
         o2.type.should.be.equal(graphics[1].type);
         o2.projectId.should.be.equal(projectId);
         o2.pageId.should.be.equal(pageId);
+        o2.should.have.property("id");
+        o2.should.not.have.property("_id");
+      })
+  })
+
+  it('should remove id-field on save a graphics', () => {
+    const graphics =
+      [{
+        type: "rect",
+        id: "hallo"
+      },
+      {
+        type: "text",
+        id: 666
+      }];
+    const pageId = "pageId"
+    return database.dbGraphic.save(projectId, pageId, graphics)
+      .then(data => {
+        const o1 = data[0];
+        o1.should.not.be.null;
+        o1.should.have.property("id").not.equal("hallo");
+        o1.should.not.have.property("_id");
       })
   })
 
@@ -84,6 +111,8 @@ describe('Database graphic', () => {
         o.type.should.be.equal(graphic.type);
         o.projectId.should.be.equal(projectId);
         o.pageId.should.be.equal(pageId);
+        o.should.have.property("id");
+        o.should.not.have.property("_id");
       })
   });
 
@@ -96,8 +125,8 @@ describe('Database graphic', () => {
     const pageId = "page-c"
     return database.dbGraphic.save(projectId, pageId, graphic)
       .then(data => {
-        const o1 = data.ops[0];
-        const id = o1._id;
+        const o1 = data[0];
+        const id = o1.id;
         const filter = {
           graphicId: id
         };
@@ -160,7 +189,7 @@ describe('Database graphic', () => {
     let graphicId;
     return database.dbGraphic.save(projectId, pageId, graphic)
       .then(data => {
-        graphicId = data.ops[0]._id;
+        graphicId = data[0].id;
         let newGraphic = {
           width: 50,
           type: "text",
@@ -169,11 +198,13 @@ describe('Database graphic', () => {
         return database.dbGraphic.update(projectId, graphicId, newGraphic)
       })
       .then(data => {
-        const o = data.value;
-        o.should.not.be.null;
-        o.type.should.be.equal("text")
-        o.width.should.be.equal(50);
-        o._id.should.be.deep.equal(graphicId);
+        data.should.not.be.null;
+        data.type.should.be.equal("text")
+        data.width.should.be.equal(50);
+        data.id.toString().should.be.equal(graphicId.toString());
+        data.should.have.property("id").to.deep.equal(graphicId);
+        data.should.not.have.property("_id");
+
         return database.dbGraphic.load(projectId, { graphicId: graphicId });
       })
       .then(data => {
@@ -181,7 +212,31 @@ describe('Database graphic', () => {
         o.should.not.be.null;
         o.type.should.be.equal("text")
         o.width.should.be.equal(50);
-        o._id.should.be.deep.equal(graphicId);
+        o.id.should.be.deep.equal(graphicId);
       });
   })
+
+
+
+  it('update one graphic and remove id-field', () => {
+    const graphic = {
+      type: "rect",
+    };
+    const pageId = "page-a";
+    let graphicId;
+    return database.dbGraphic.save(projectId, pageId, graphic)
+      .then(data => {
+        graphicId = data[0].id;
+        let newGraphic = {
+          projectId: projectId,
+          id: "hello"
+        };
+        return database.dbGraphic.update(projectId, graphicId, newGraphic)
+      })
+      .then(data => {
+        data.should.not.be.null;
+        data.should.have.property("id").to.deep.equal(graphicId);
+        data.should.not.have.property("_id");
+      });
+  })  
 })
