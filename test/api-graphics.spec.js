@@ -74,6 +74,33 @@ describe("graphics REST interface", () => {
       })
   })
 
+  it('should GET graphic by filter', () => {
+    const data = [{
+      type: "text",
+      pageId: "42"
+    },
+    {
+      type: "rect",
+      x: 222,
+      pageId: "43"
+    }];
+    return axios.post(GRAPHIC_URL, data)
+      .then(res => {
+        const options = {
+          params: { pageId: 43 }
+        }
+        return axios.get(GRAPHIC_URL, options);
+      })
+      .then(res => {
+        res.should.be.not.null;
+        res.status.should.be.equal(200);
+        res.data.length.should.be.equal(1);
+        let o = res.data[0];
+        o.type.should.be.equal("rect");
+        o.pageId.should.be.equal("43");
+      })
+  })
+
   it('should PUT graphics', () => {
     const data = {
       type: "text",

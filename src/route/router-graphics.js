@@ -20,7 +20,8 @@ function postGraphics(req, res) {
 
 function getGraphics(req, res) {
   const projectId = req.params.projectId;
-  database.dbGraphic.load(projectId)
+  const query = req.query;
+  database.dbGraphic.load(projectId, query)
     .then(data => {
       res.json(data);
     })
