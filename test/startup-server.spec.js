@@ -19,7 +19,7 @@ let API;
 */
 
 before('start server', () => {
-  const mongoConnectionString = process.env.DV_MONGO_URI;
+  const mongoConnectionString = "mongodb://localhost";
   return database.connect(mongoConnectionString)
     .then(() => {
       // create Server
