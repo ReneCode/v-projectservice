@@ -1,6 +1,8 @@
 var WebServer = require('../src/web-server');
 let database = require('../src/database/database');
 
+require('dotenv').config()
+
 process.env.PORT = 3101
 
 const OPTIONS = {

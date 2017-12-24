@@ -1,9 +1,11 @@
 const WebServer = require('./web-server');
 const database = require('./database/database');
 
+require('dotenv').config()
 
 const OPTIONS = {
-  port: process.env.PORT || 3001
+  port: process.env.PORT || 3001,
+  authorize: false
 };
 
 const webServer = new WebServer(OPTIONS);

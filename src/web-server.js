@@ -17,8 +17,10 @@ class WebServer {
       throw new Error("options missing")
     }
     this.options = options;
-    if (this.options.authorize === undefined) this.options.authorize = true;
-    if (this.options.logging === undefined) this.options.logging = true;
+    if (this.options.authorize === undefined)
+      this.options.authorize = true;
+    if (this.options.logging === undefined)
+      this.options.logging = true;
   }
 
   listen() {
@@ -48,7 +50,9 @@ class WebServer {
     })
 
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.urlencoded({
+      extended: true
+    }));
     app.use(cors());
 
     if (this.options.logging) {
